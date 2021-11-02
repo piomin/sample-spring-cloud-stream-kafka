@@ -1,0 +1,48 @@
+spring.application.name: stock-service
+
+spring.kafka.bootstrap-servers: ${KAFKA_URL}
+
+#spring.cloud.stream.bindings.orders-in-0.group: a
+#spring.cloud.stream.bindings.orders-in-0.consumer.partitioned: true
+#spring.cloud.stream.kafka.bindings.orders-in-0.consumer.autoRebalanceEnabled: false
+#spring.cloud.stream.instanceIndex: 0
+#spring.cloud.stream.instanceCount: 2
+
+spring.cloud.stream.bindings.orders-in-0.destination: streams.pminkows.orders.buy
+spring.cloud.stream.bindings.orders-in-1.destination: streams.pminkows.orders.sell
+spring.cloud.stream.bindings.orders-out-0.destination: streams.pminkows.orders.status
+spring.cloud.stream.kafka.streams.binder.functions.orders.applicationId: orders
+#spring.cloud.stream.kafka.streams.bindings.orders-in-1.consumer.materializedAs: orders-status
+
+spring.cloud.stream.bindings.pairs-in-0.destination: streams.pminkows.orders.buy
+spring.cloud.stream.bindings.pairs-in-1.destination: streams.pminkows.orders.sell
+spring.cloud.stream.bindings.pairs-out-0.destination: streams.pminkows.orders.transactions
+spring.cloud.stream.kafka.streams.binder.functions.pairs.applicationId: pairs
+
+spring.cloud.stream.bindings.transactions-in-0.destination: streams.pminkows.orders.transactions
+spring.cloud.stream.bindings.transactions-in-1.destination: streams.pminkows.orders.status
+spring.cloud.stream.bindings.transactions-out-0.destination: streams.pminkows.orders.done
+spring.cloud.stream.kafka.streams.binder.functions.transactions.applicationId: transactions
+
+#spring.cloud.stream.bindings.transactions2-in-0.destination: streams.pminkows.orders.transactions
+#spring.cloud.stream.bindings.transactions2-in-1.destination: streams.pminkows.orders.status
+#spring.cloud.stream.bindings.transactions2-out-0.destination: streams.pminkows.orders.done
+#spring.cloud.stream.kafka.streams.binder.functions.transactions2.applicationId: transactions2
+
+spring.cloud.stream.bindings.updateBuy-in-0.destination: streams.pminkows.orders.done
+spring.cloud.stream.bindings.updateBuy-in-1.destination: streams.pminkows.orders.status
+spring.cloud.stream.bindings.updateBuy-out-0.destination: streams.pminkows.orders.status
+spring.cloud.stream.kafka.streams.binder.functions.updateBuy.applicationId: updateBuy
+
+spring.cloud.stream.bindings.updateSell-in-0.destination: streams.pminkows.orders.done
+spring.cloud.stream.bindings.updateSell-in-1.destination: streams.pminkows.orders.status
+spring.cloud.stream.bindings.updateSell-out-0.destination: streams.pminkows.orders.status
+spring.cloud.stream.kafka.streams.binder.functions.updateSell.applicationId: updateSell
+
+spring.cloud.stream.function.definition: orders;pairs;transactions;updateBuy;updateSell
+
+spring.output.ansi.enabled: ALWAYS
+
+logging.pattern.console: "%clr(%d{HH:mm:ss.SSS}){blue} %clr(---){faint} %clr([%15.15t]){yellow} %clr(:){red} %clr(%m){faint}%n"
+
+management.endpoints.web.exposure.include: "*"
