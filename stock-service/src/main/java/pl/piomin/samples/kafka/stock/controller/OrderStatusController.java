@@ -8,7 +8,7 @@ import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQuerySer
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.piomin.samples.kafka.stock.model.OrderStatus;
+import pl.piomin.samples.kafka.stock.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +24,13 @@ public class OrderStatusController {
     }
 
     @GetMapping
-    public List<OrderStatus> getOrders() {
-        List<OrderStatus> orders = new ArrayList<>();
-        ReadOnlyKeyValueStore<Long, OrderStatus> keyValueStore =
+    public List<Order> getOrders() {
+        List<Order> orders = new ArrayList<>();
+        ReadOnlyKeyValueStore<Long, Order> keyValueStore =
                 queryService.getQueryableStore("orders-status", QueryableStoreTypes.keyValueStore());
-        KeyValueIterator<Long, OrderStatus> it = keyValueStore.all();
+        KeyValueIterator<Long, Order> it = keyValueStore.all();
         while (it.hasNext()) {
-            KeyValue<Long, OrderStatus> kv = it.next();
+            KeyValue<Long, Order> kv = it.next();
             orders.add(kv.value);
         }
         return orders;

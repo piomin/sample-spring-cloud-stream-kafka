@@ -4,12 +4,12 @@ spring.kafka.bootstrap-servers: ${KAFKA_URL}
 
 spring.cloud.stream.function.definition: orderBuySupplier;orderSellSupplier
 
-spring.cloud.stream.bindings.orderBuySupplier-out-0.destination: streams.pminkows.orders.buy
+spring.cloud.stream.bindings.orderBuySupplier-out-0.destination: orders.buy
 #spring.cloud.stream.bindings.orderBuySupplier-out-0.producer.partitionKeyExpression: payload.type
 #spring.cloud.stream.bindings.orderBuySupplier-out-0.producer.partitionCount: 2
 spring.cloud.stream.kafka.bindings.orderBuySupplier-out-0.producer.configuration.key.serializer: org.apache.kafka.common.serialization.LongSerializer
 
-spring.cloud.stream.bindings.orderSellSupplier-out-0.destination: streams.pminkows.orders.sell
+spring.cloud.stream.bindings.orderSellSupplier-out-0.destination: orders.sell
 #spring.cloud.stream.bindings.orderSellSupplier-out-0.producer.partitionKeyExpression: payload.type
 #spring.cloud.stream.bindings.orderSellSupplier-out-0.producer.partitionCount: 3
 spring.cloud.stream.kafka.bindings.orderSellSupplier-out-0.producer.configuration.key.serializer: org.apache.kafka.common.serialization.LongSerializer
