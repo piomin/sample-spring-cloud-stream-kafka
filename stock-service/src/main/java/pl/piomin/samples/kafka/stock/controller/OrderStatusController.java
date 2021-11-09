@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.piomin.samples.kafka.stock.model.Order;
+import pl.piomin.samples.kafka.stock.model.TransactionTotal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +24,10 @@ public class OrderStatusController {
         this.queryService = queryService;
     }
 
-    @GetMapping
-    public List<Order> getOrders() {
-        List<Order> orders = new ArrayList<>();
-        ReadOnlyKeyValueStore<Long, Order> keyValueStore =
-                queryService.getQueryableStore("orders-status", QueryableStoreTypes.keyValueStore());
-        KeyValueIterator<Long, Order> it = keyValueStore.all();
-        while (it.hasNext()) {
-            KeyValue<Long, Order> kv = it.next();
-            orders.add(kv.value);
-        }
-        return orders;
+    @GetMapping("/all")
+    public TransactionTotal getAllTransactionsSummary() {
+        ReadOnlyKeyValueStore<String, TransactionTotal> keyValueStore =
+                queryService.getQueryableStore("all-transactions-store", QueryableStoreTypes.keyValueStore());
+        return keyValueStore.get("NEW");
     }
 }

@@ -4,6 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.KeyValueBytesStoreSupplier;
+import org.apache.kafka.streams.state.KeyValueStore;
+import org.apache.kafka.streams.state.StoreBuilder;
+import org.apache.kafka.streams.state.Stores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -55,17 +59,32 @@ public class StockService {
 
     @Bean
     public Consumer<KStream<Long, Transaction>> total() {
+        KeyValueBytesStoreSupplier storeSupplier = Stores.persistentKeyValueStore(
+                "all-transactions-store");
         return transactions -> transactions
                 .groupBy((k, v) -> v.getStatus(), Grouped.with(Serdes.String(), new JsonSerde<>(Transaction.class)))
-                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
-                .aggregate(TransactionTotal::new, (k, v, a) -> {
-                    a.setCount(a.getCount() + 1);
-                    a.setAmount(a.getAmount() + v.getAmount());
-                    return a;
-                }, Materialized.with(Serdes.String(), new JsonSerde<>(TransactionTotal.class)))
+//                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
+                .aggregate(
+                        TransactionTotal::new,
+                        (k, v, a) -> {
+                            a.setCount(a.getCount() + 1);
+                            a.setAmount(a.getAmount() + v.getAmount());
+                            return a;
+                        },
+                        Materialized.<String, TransactionTotal> as(storeSupplier)
+                            .withKeySerde(Serdes.String())
+                            .withValueSerde(new JsonSerde<>(TransactionTotal.class)))
                 .toStream()
                 .peek((k, v) -> log.info("Total: {}", v));
     }
+
+//    @Bean
+//    public StoreBuilder<KeyValueStore<String, TransactionTotal>> allTransactionsStore() {
+//        return Stores.keyValueStoreBuilder(
+//                Stores.persistentKeyValueStore("all-transactions-store"),
+//                Serdes.String(),
+//                new JsonSerde<>(TransactionTotal.class));
+//    }
 
     private Transaction execute(Order orderBuy, Order orderSell) {
         if (orderBuy.getAmount() >= orderSell.getAmount()) {
