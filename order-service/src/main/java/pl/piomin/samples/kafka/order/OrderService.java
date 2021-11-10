@@ -19,28 +19,26 @@ import java.util.function.Supplier;
 @Slf4j
 public class OrderService {
 
-    private static long buyOrderId = 0;
-    private static long sellOrderId = 0;
     private static long orderId = 0;
     private static final Random r = new Random();
 
     private Map<Integer, Integer> prices = Map.of(1, 1000, 2, 2000, 3, 5000, 4, 1500, 5, 2500);
 
     LinkedList<Order> buyOrders = new LinkedList<>(List.of(
-            new Order(++orderId, 1, 1, 100, null, OrderType.BUY, 1000),
-            new Order(++orderId, 2, 1, 200, null, OrderType.BUY, 1050),
-            new Order(++orderId, 3, 1, 100, null, OrderType.BUY, 1030),
-            new Order(++orderId, 4, 1, 200, null, OrderType.BUY, 1050),
-            new Order(++orderId, 5, 1, 200, null, OrderType.BUY, 1000),
-            new Order(++orderId, 11, 1, 100, null, OrderType.BUY, 1050)
+            new Order(++orderId, 1, 1, 100, LocalDateTime.now(), OrderType.BUY, 1000),
+            new Order(++orderId, 2, 1, 200, LocalDateTime.now(), OrderType.BUY, 1050),
+            new Order(++orderId, 3, 1, 100, LocalDateTime.now(), OrderType.BUY, 1030),
+            new Order(++orderId, 4, 1, 200, LocalDateTime.now(), OrderType.BUY, 1050),
+            new Order(++orderId, 5, 1, 200, LocalDateTime.now(), OrderType.BUY, 1000),
+            new Order(++orderId, 11, 1, 100, LocalDateTime.now(), OrderType.BUY, 1050)
     ));
 
     LinkedList<Order> sellOrders = new LinkedList<>(List.of(
-            new Order(++orderId, 6, 1, 200, null, OrderType.SELL, 950),
-            new Order(++orderId, 7, 1, 100, null, OrderType.SELL, 1000),
-            new Order(++orderId, 8, 1, 100, null, OrderType.SELL, 1050),
-            new Order(++orderId, 9, 1, 300, null, OrderType.SELL, 1000),
-            new Order(++orderId, 10, 1, 200, null, OrderType.SELL, 1020)
+            new Order(++orderId, 6, 1, 200, LocalDateTime.now(), OrderType.SELL, 950),
+            new Order(++orderId, 7, 1, 100, LocalDateTime.now(), OrderType.SELL, 1000),
+            new Order(++orderId, 8, 1, 100, LocalDateTime.now(), OrderType.SELL, 1050),
+            new Order(++orderId, 9, 1, 300, LocalDateTime.now(), OrderType.SELL, 1000),
+            new Order(++orderId, 10, 1, 200, LocalDateTime.now(), OrderType.SELL, 1020)
     ));
 
     public static void main(String[] args) {
@@ -121,35 +119,4 @@ public class OrderService {
 //        };
 //    }
 
-//    @Bean
-//    public Supplier<Message<Transaction>> transactionSupplier() {
-//        return () -> {
-//            Transaction o = new Transaction(
-//                    ++sellOrderId,
-//                    sellOrderId,
-//                    sellOrderId,
-//                    50,
-//                    0,
-//                    LocalDateTime.now());
-//            log.info("Transaction: {}", o);
-//            return MessageBuilder
-//                    .withPayload(o)
-//                    .setHeader(KafkaHeaders.MESSAGE_KEY, sellOrderId)
-//                    .build();
-//        };
-//    }
-
-//    @Bean
-//    public Supplier<Message<Order>> orderSellSupplier() {
-//        return () -> {
-//            Integer productId = r.nextInt(1, 6);
-//            int price = prices.get(productId) + r.nextInt(-100,100);
-//            Order o = new Order(++sellOrderId, r.nextInt(1, 11), productId, 100, LocalDateTime.now(), OrderType.SELL, price);
-//            log.info("Order: {}", o);
-//            return MessageBuilder
-//                    .withPayload(o)
-//                    .setHeader(KafkaHeaders.MESSAGE_KEY, (long) productId)
-//                    .build();
-//        };
-//    }
 }

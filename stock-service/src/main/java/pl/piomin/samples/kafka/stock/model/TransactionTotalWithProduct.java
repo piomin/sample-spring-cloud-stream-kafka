@@ -7,8 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TransactionTotal {
-    private int count;
-    private int productCount;
-    private int amount;
+public class TransactionTotalWithProduct {
+    private Transaction transaction;
+    private Integer productId;
 }
