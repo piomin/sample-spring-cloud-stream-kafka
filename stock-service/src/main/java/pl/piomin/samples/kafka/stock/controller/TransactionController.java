@@ -40,7 +40,7 @@ public class TransactionController {
         return keyValueStore.get(productId);
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/product/latest/{productId}")
     public TransactionTotal getLatestSummaryByProductId(@PathVariable("productId") Integer productId) {
         ReadOnlyKeyValueStore<Integer, TransactionTotal> keyValueStore =
                 queryService.getQueryableStore("latest-transactions-per-product-store",

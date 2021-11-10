@@ -91,12 +91,12 @@ public class StockService {
                         JoinWindows.of(Duration.ofSeconds(10)),
                         StreamJoined.with(Serdes.Long(), new JsonSerde<>(Transaction.class), new JsonSerde<>(Order.class)))
                 .groupBy((k, v) -> v.getProductId(), Grouped.with(Serdes.Integer(), new JsonSerde<>(TransactionTotalWithProduct.class)))
-//                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
                 .aggregate(
                         TransactionTotal::new,
                         (k, v, a) -> {
                             a.setCount(a.getCount() + 1);
-                            a.setAmount(a.getAmount() + v.getTransaction().getAmount());
+                            a.setProductCount(a.getProductCount() + v.getTransaction().getAmount());
+                            a.setAmount(a.getAmount() + (v.getTransaction().getPrice() * v.getTransaction().getAmount()));
                             return a;
                         },
                         Materialized.<Integer, TransactionTotal> as(storeSupplier)
@@ -131,14 +131,6 @@ public class StockService {
                 .toStream()
                 .peek((k, v) -> log.info("Total per product last 30s({}): {}", k, v));
     }
-
-//    @Bean
-//    public StoreBuilder<KeyValueStore<String, TransactionTotal>> allTransactionsStore() {
-//        return Stores.keyValueStoreBuilder(
-//                Stores.persistentKeyValueStore("all-transactions-store"),
-//                Serdes.String(),
-//                new JsonSerde<>(TransactionTotal.class));
-//    }
 
     private Transaction execute(Order orderBuy, Order orderSell) {
         if (orderBuy.getAmount() >= orderSell.getAmount()) {

@@ -10,5 +10,5 @@ import lombok.*;
 public class TransactionTotal {
     private int count;
     private int productCount;
-    private int amount;
+    private long amount;
 }
