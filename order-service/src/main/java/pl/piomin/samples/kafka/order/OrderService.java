@@ -9,7 +9,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import pl.piomin.samples.kafka.order.model.Order;
 import pl.piomin.samples.kafka.order.model.OrderType;
-import pl.piomin.samples.kafka.order.model.Transaction;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,7 +21,17 @@ public class OrderService {
     private static long orderId = 0;
     private static final Random r = new Random();
 
-    private Map<Integer, Integer> prices = Map.of(1, 1000, 2, 2000, 3, 5000, 4, 1500, 5, 2500);
+    private final Map<Integer, Integer> prices = Map.of(
+            1, 1000,
+            2, 2000,
+            3, 5000,
+            4, 1500,
+            5, 2500,
+            6, 1000,
+            7, 2000,
+            8, 5000,
+            9, 1500,
+            10, 2500);
 
     LinkedList<Order> buyOrders = new LinkedList<>(List.of(
             new Order(++orderId, 1, 1, 100, LocalDateTime.now(), OrderType.BUY, 1000),
@@ -97,7 +106,7 @@ public class OrderService {
 //                .build();
 //        };
 //    }
-//
+
 //    @Bean
 //    public Supplier<Message<Order>> orderSellSupplier() {
 //        return () -> {

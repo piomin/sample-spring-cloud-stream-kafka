@@ -89,8 +89,11 @@ public class StockService {
                 .join(orders.selectKey((k, v) -> v.getId()),
                         (t, o) -> new TransactionTotalWithProduct(t, o.getProductId()),
                         JoinWindows.of(Duration.ofSeconds(10)),
-                        StreamJoined.with(Serdes.Long(), new JsonSerde<>(Transaction.class), new JsonSerde<>(Order.class)))
-                .groupBy((k, v) -> v.getProductId(), Grouped.with(Serdes.Integer(), new JsonSerde<>(TransactionTotalWithProduct.class)))
+                        StreamJoined.with(Serdes.Long(),
+                                new JsonSerde<>(Transaction.class),
+                                new JsonSerde<>(Order.class)))
+                .groupBy((k, v) -> v.getProductId(),
+                        Grouped.with(Serdes.Integer(), new JsonSerde<>(TransactionTotalWithProduct.class)))
                 .aggregate(
                         TransactionTotal::new,
                         (k, v, a) -> {

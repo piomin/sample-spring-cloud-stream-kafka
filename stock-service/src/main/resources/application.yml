@@ -2,7 +2,7 @@ spring.application.name: stock-service
 
 spring.kafka.bootstrap-servers: ${KAFKA_URL}
 
-spring.cloud.stream.function.definition: orders;transactions;total;totalPerProduct
+spring.cloud.stream.function.definition: orders;transactions;total;totalPerProduct;latestPerProduct
 
 spring.cloud.stream.bindings.orders-in-0.destination: orders.buy
 spring.cloud.stream.bindings.orders-in-1.destination: orders.sell
@@ -19,6 +19,10 @@ spring.cloud.stream.kafka.streams.binder.functions.total.applicationId: total
 spring.cloud.stream.bindings.totalPerProduct-in-0.destination: transactions
 spring.cloud.stream.bindings.totalPerProduct-in-1.destination: orders.sell
 spring.cloud.stream.kafka.streams.binder.functions.totalPerProduct.applicationId: totalPerProduct
+
+spring.cloud.stream.bindings.latestPerProduct-in-0.destination: transactions
+spring.cloud.stream.bindings.latestPerProduct-in-1.destination: orders.sell
+spring.cloud.stream.kafka.streams.binder.functions.latestPerProduct.applicationId: latestPerProduct
 
 spring.output.ansi.enabled: ALWAYS
 
