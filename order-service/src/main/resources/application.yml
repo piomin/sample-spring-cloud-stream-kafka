@@ -1,6 +1,15 @@
 spring.application.name: order-service
 
 spring.kafka.bootstrap-servers: ${KAFKA_URL}
+spring.cloud.stream.kafka.binder:
+  configuration:
+    security.protocol: SASL_SSL
+    sasl.mechanism: PLAIN
+  jaas:
+    loginModule: org.apache.kafka.common.security.plain.PlainLoginModule
+    options:
+      username: ${KAFKA_USER}
+      password: ${KAFKA_PASSWORD}
 
 spring.cloud.stream.function.definition: orderBuySupplier;orderSellSupplier
 

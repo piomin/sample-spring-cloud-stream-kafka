@@ -1,28 +1,16 @@
 spring.application.name: stock-service
 
 spring.kafka.bootstrap-servers: ${KAFKA_URL}
+spring.cloud.stream.kafka.streams.binder.configuration:
+  security.protocol: SASL_SSL
+  sasl:
+    mechanism: PLAIN
+    jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="${KAFKA_USER}" password="${KAFKA_PASSWORD}";
 
-spring.cloud.stream.function.definition: orders;transactions;total;totalPerProduct;latestPerProduct
-
-spring.cloud.stream.bindings.orders-in-0.destination: orders.buy
-spring.cloud.stream.bindings.orders-in-1.destination: orders.sell
-spring.cloud.stream.kafka.streams.binder.functions.orders.applicationId: orders
-
-spring.cloud.stream.bindings.transactions-in-0.destination: orders.buy
-spring.cloud.stream.bindings.transactions-in-1.destination: orders.sell
-spring.cloud.stream.bindings.transactions-out-0.destination: transactions
-spring.cloud.stream.kafka.streams.binder.functions.transactions.applicationId: transactions
-
-spring.cloud.stream.bindings.total-in-0.destination: transactions
-spring.cloud.stream.kafka.streams.binder.functions.total.applicationId: total
-
-spring.cloud.stream.bindings.totalPerProduct-in-0.destination: transactions
-spring.cloud.stream.bindings.totalPerProduct-in-1.destination: orders.sell
-spring.cloud.stream.kafka.streams.binder.functions.totalPerProduct.applicationId: totalPerProduct
-
-spring.cloud.stream.bindings.latestPerProduct-in-0.destination: transactions
-spring.cloud.stream.bindings.latestPerProduct-in-1.destination: orders.sell
-spring.cloud.stream.kafka.streams.binder.functions.latestPerProduct.applicationId: latestPerProduct
+# example template to copy
+spring.cloud.stream.bindings.<name>-in-0.destination: <in-0-stream>
+spring.cloud.stream.bindings.<name>-in-1.destination: <in-1-stream>
+spring.cloud.stream.kafka.streams.binder.functions.<name>.applicationId: <unique_name>
 
 spring.output.ansi.enabled: ALWAYS
 
