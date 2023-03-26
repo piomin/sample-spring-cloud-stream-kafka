@@ -60,7 +60,7 @@ public class OrderService {
             if (buyOrders.peek() != null) {
                 Message<Order> o = MessageBuilder
                         .withPayload(buyOrders.peek())
-                        .setHeader(KafkaHeaders.MESSAGE_KEY, Objects.requireNonNull(buyOrders.poll()).getId())
+                        .setHeader(KafkaHeaders.KEY, Objects.requireNonNull(buyOrders.poll()).getId())
                         .build();
                 log.info("Order: {}", o.getPayload());
                 return o;
@@ -76,7 +76,7 @@ public class OrderService {
             if (sellOrders.peek() != null) {
                 Message<Order> o = MessageBuilder
                         .withPayload(sellOrders.peek())
-                        .setHeader(KafkaHeaders.MESSAGE_KEY, Objects.requireNonNull(sellOrders.poll()).getId())
+                        .setHeader(KafkaHeaders.KEY, Objects.requireNonNull(sellOrders.poll()).getId())
                         .build();
                 log.info("Order: {}", o.getPayload());
                 return o;
