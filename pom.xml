@@ -21,7 +21,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>20</java.version>
         <spring-cloud.version>2020.0.6</spring-cloud.version>
         <sonar.projectKey>piomin_sample-spring-cloud-stream-kafka</sonar.projectKey>
         <sonar.organization>piomin</sonar.organization>
