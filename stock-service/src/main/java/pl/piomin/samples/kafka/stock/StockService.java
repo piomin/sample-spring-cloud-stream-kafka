@@ -1,10 +1,13 @@
 package pl.piomin.samples.kafka.stock;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.*;
-import org.apache.kafka.streams.state.*;
+import org.apache.kafka.streams.state.KeyValueBytesStoreSupplier;
+import org.apache.kafka.streams.state.Stores;
+import org.apache.kafka.streams.state.WindowBytesStoreSupplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,9 +26,9 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 @SpringBootApplication
-@Slf4j
 public class StockService {
 
+    private static final Logger log = LoggerFactory.getLogger(StockService.class);
     private static long transactionId = 0;
 
     public static void main(String[] args) {

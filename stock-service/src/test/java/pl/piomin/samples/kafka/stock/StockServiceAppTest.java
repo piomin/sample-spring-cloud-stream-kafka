@@ -18,7 +18,7 @@ public class StockServiceAppTest {
 
 
     @DynamicPropertySource
-    static void rabbitProperties(DynamicPropertyRegistry registry) {
+    static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
     }
 

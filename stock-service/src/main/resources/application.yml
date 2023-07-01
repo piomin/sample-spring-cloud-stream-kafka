@@ -3,6 +3,7 @@ spring.application.name: stock-service
 spring.kafka.bootstrap-servers: ${KAFKA_URL}
 
 spring.cloud.stream.function.definition: orders;transactions;total;totalPerProduct;latestPerProduct
+spring.cloud.function.definition: orders;transactions;total;totalPerProduct;latestPerProduct
 
 spring.cloud.stream.bindings.orders-in-0.destination: orders.buy
 spring.cloud.stream.bindings.orders-in-1.destination: orders.sell

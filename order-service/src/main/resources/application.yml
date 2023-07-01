@@ -3,6 +3,7 @@ spring.application.name: order-service
 spring.kafka.bootstrap-servers: ${KAFKA_URL}
 
 spring.cloud.stream.function.definition: orderBuySupplier;orderSellSupplier
+spring.cloud.function.definition: orderBuySupplier;orderSellSupplier
 
 spring.cloud.stream.bindings.orderBuySupplier-out-0.destination: orders.buy
 spring.cloud.stream.kafka.bindings.orderBuySupplier-out-0.producer.configuration.key.serializer: org.apache.kafka.common.serialization.LongSerializer
