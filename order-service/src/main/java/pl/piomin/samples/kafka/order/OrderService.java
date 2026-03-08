@@ -1,6 +1,7 @@
 package pl.piomin.samples.kafka.order;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +16,9 @@ import java.util.*;
 import java.util.function.Supplier;
 
 @SpringBootApplication
-@Slf4j
 public class OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private static long orderId = 0;
     private static final Random r = new Random();
