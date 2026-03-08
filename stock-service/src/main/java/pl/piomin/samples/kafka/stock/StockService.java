@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.support.serializer.JacksonJsonSerde;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import pl.piomin.samples.kafka.stock.logic.OrderLogic;
 import pl.piomin.samples.kafka.stock.model.Order;
@@ -93,10 +94,10 @@ public class StockService {
                         (t, o) -> new TransactionTotalWithProduct(t, o.getProductId()),
                         JoinWindows.of(Duration.ofSeconds(10)),
                         StreamJoined.with(Serdes.Long(),
-                                new JsonSerde<>(Transaction.class),
-                                new JsonSerde<>(Order.class)))
+                                new JacksonJsonSerde<>(Transaction.class),
+                                new JacksonJsonSerde<>(Order.class)))
                 .groupBy((k, v) -> v.getProductId(),
-                        Grouped.with(Serdes.Integer(), new JsonSerde<>(TransactionTotalWithProduct.class)))
+                        Grouped.with(Serdes.Integer(), new JacksonJsonSerde<>(TransactionTotalWithProduct.class)))
                 .aggregate(
                         TransactionTotal::new,
                         (k, v, a) -> {
@@ -107,7 +108,7 @@ public class StockService {
                         },
                         Materialized.<Integer, TransactionTotal> as(storeSupplier)
                                 .withKeySerde(Serdes.Integer())
-                                .withValueSerde(new JsonSerde<>(TransactionTotal.class)))
+                                .withValueSerde(new JacksonJsonSerde<>(TransactionTotal.class)))
                 .toStream()
                 .peek((k, v) -> log.info("Total per product({}): {}", k, v));
     }
@@ -121,9 +122,9 @@ public class StockService {
                 .join(orders.selectKey((k, v) -> v.getId()),
                         (t, o) -> new TransactionTotalWithProduct(t, o.getProductId()),
                         JoinWindows.of(Duration.ofSeconds(10)),
-                        StreamJoined.with(Serdes.Long(), new JsonSerde<>(Transaction.class), new JsonSerde<>(Order.class)))
-                .groupBy((k, v) -> v.getProductId(), Grouped.with(Serdes.Integer(), new JsonSerde<>(TransactionTotalWithProduct.class)))
-                .windowedBy(TimeWindows.of(Duration.ofSeconds(30)))
+                        StreamJoined.with(Serdes.Long(), new JacksonJsonSerde<>(Transaction.class), new JacksonJsonSerde<>(Order.class)))
+                .groupBy((k, v) -> v.getProductId(), Grouped.with(Serdes.Integer(), new JacksonJsonSerde<>(TransactionTotalWithProduct.class)))
+                .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofSeconds(30)))
                 .aggregate(
                         TransactionTotal::new,
                         (k, v, a) -> {
@@ -133,7 +134,7 @@ public class StockService {
                         },
                         Materialized.<Integer, TransactionTotal> as(storeSupplier)
                                 .withKeySerde(Serdes.Integer())
-                                .withValueSerde(new JsonSerde<>(TransactionTotal.class)))
+                                .withValueSerde(new JacksonJsonSerde<>(TransactionTotal.class)))
                 .toStream()
                 .peek((k, v) -> log.info("Total per product last 30s({}): {}", k, v));
     }
