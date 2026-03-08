@@ -12,7 +12,7 @@ public class KafkaContainerDevMode {
     @Bean
     @ServiceConnection
     public KafkaContainer mongodbContainer() {
-        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.2.1"));
+        return new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.8.6"));
     }
 
 }

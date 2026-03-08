@@ -14,7 +14,7 @@ import org.testcontainers.utility.DockerImageName;
 public class StockServiceAppTest {
 
     @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.2.1"));
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.8.6"));
 
 
     @DynamicPropertySource
